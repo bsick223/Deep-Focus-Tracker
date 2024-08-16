@@ -43,9 +43,9 @@ SHORT_BREAK_BUTTON = Button(None, (WIDTH/2, HEIGHT/2-140), 120, 30, "Short Break
 LONG_BREAK_BUTTON = Button(None, (WIDTH/2+150, HEIGHT/2-140), 120, 30, "Long Break", 
                            pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#FFFFFF", "#9ab034")
 
-POMODORO_LENGTH = 5  # 1500 secs / 25 mins
-SHORT_BREAK_LENGTH = 3  # 300 secs / 5 mins
-LONG_BREAK_LENGTH = 9  # 900 secs / 15 mins
+POMODORO_LENGTH = 1500  # 1500 secs / 25 mins
+SHORT_BREAK_LENGTH = 300  # 300 secs / 5 mins
+LONG_BREAK_LENGTH = 900  # 900 secs / 15 mins
 
 def save_progress(total_time):
     with open("focus_data.json", "w") as file:
