@@ -1,9 +1,5 @@
-# To-do 
-# add a long break sound for timer
-# Done, highlight the state we are in
-# do the 4 rounds of pomodoro then a long break
-# be able to save progress
-
+# To-Do
+# Fix the crash report / create the auto save
 # when goal achieved play a video of self dancing
 
 import pygame
@@ -13,6 +9,10 @@ import json
 from datetime import datetime
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+import os
+
+# Set the working directory to the directory of the script
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 pygame.init()
 
@@ -115,7 +115,7 @@ if current_date not in daily_focus_time:
 
 current_seconds = POMODORO_LENGTH
 state = "POMODORO"  # Can be "POMODORO", "SHORT_BREAK", "LONG_BREAK"
-pomodoro_count = 0  # Track completed Pomodoros
+pomodoro_count = 0
 
 pygame.time.set_timer(pygame.USEREVENT, 1000)  # 1000 milliseconds will return True
 started = False
@@ -133,6 +133,7 @@ def draw_pomodoro_indicators(screen, count):
 #     return f"{hrs}h {mins}m {secs}s"
 
 def main():
+    global started, accumulated_seconds, pomodoro_count, current_seconds, state, total_focus_time
 
     while True:
         for event in pygame.event.get():

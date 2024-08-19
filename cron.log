@@ -1,0 +1,105 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Foucs-Tracker/main.py': [Errno 2] No such file or directory
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Foucs-Tracker/main.py': [Errno 2] No such file or directory
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+Traceback (most recent call last):
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/main.py", line 1, in <module>
+    from focus_tracker import load_progress, get_weekly_focus_time
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/focus_tracker.py", line 4, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+2024-08-19 10:40:03.678 Python[2897:64292] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Daily Focus Time Data: {'2024-08-15': 4000, '2024-08-16': 6400, '2024-08-17': 1800, '2024-08-18': 3485, '2024-08-19': 5}
+Calculated Weekly Focus Time: 0.00 hours
+Notification sent successfully!
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3: can't open file '/Users/brendan/Desktop/Projects/Focus-Tracker/main.py': [Errno 1] Operation not permitted
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Traceback (most recent call last):
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/main.py", line 1, in <module>
+    from focus_tracker import load_progress, get_weekly_focus_time
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/focus_tracker.py", line 15, in <module>
+    break_sound = pygame.mixer.Sound("assets/Calm Alarm.wav")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No file 'assets/Calm Alarm.wav' found in working directory '/Users/brendan'.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Traceback (most recent call last):
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/main.py", line 1, in <module>
+    from focus_tracker import load_progress, get_weekly_focus_time
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/focus_tracker.py", line 15, in <module>
+    break_sound = pygame.mixer.Sound("assets/Calm Alarm.wav")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No file 'assets/Calm Alarm.wav' found in working directory '/Users/brendan'.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Traceback (most recent call last):
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/main.py", line 1, in <module>
+    from focus_tracker import load_progress, get_weekly_focus_time
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/focus_tracker.py", line 15, in <module>
+    break_sound = pygame.mixer.Sound("assets/Calm Alarm.wav")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No file 'assets/Calm Alarm.wav' found in working directory '/Users/brendan'.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Traceback (most recent call last):
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/main.py", line 1, in <module>
+    from focus_tracker import load_progress, get_weekly_focus_time
+  File "/Users/brendan/Desktop/Projects/Focus-Tracker/focus_tracker.py", line 15, in <module>
+    break_sound = pygame.mixer.Sound("assets/Calm Alarm.wav")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: No file 'assets/Calm Alarm.wav' found in working directory '/Users/brendan'.
+2024-08-19 11:03:02.606 Python[3625:84886] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Daily Focus Time Data: {'2024-08-15': 4000, '2024-08-16': 6400, '2024-08-17': 1800, '2024-08-18': 3485, '2024-08-19': 5}
+Calculated Weekly Focus Time: 0.00 hours
+Notification sent successfully!
+2024-08-19 11:04:02.603 Python[3654:85591] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Daily Focus Time Data: {'2024-08-15': 4000, '2024-08-16': 6400, '2024-08-17': 1800, '2024-08-18': 3485, '2024-08-19': 5}
+Calculated Weekly Focus Time: 0.00 hours
+Notification sent successfully!
+2024-08-19 11:05:02.634 Python[3689:86747] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Daily Focus Time Data: {'2024-08-15': 4000, '2024-08-16': 6400, '2024-08-17': 1800, '2024-08-18': 3485, '2024-08-19': 5}
+Calculated Weekly Focus Time: 0.00 hours
+Notification sent successfully!
+2024-08-19 11:06:02.622 Python[3700:87566] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Daily Focus Time Data: {'2024-08-15': 4000, '2024-08-16': 6400, '2024-08-17': 1800, '2024-08-18': 3485, '2024-08-19': 5}
+Calculated Weekly Focus Time: 0.00 hours
+Notification sent successfully!

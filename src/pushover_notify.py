@@ -1,6 +1,7 @@
 import requests
 from settings import PUSHOVER_API_TOKEN, PUSHOVER_USER_KEY
 
+
 def send_pushover_notification(weekly_focus_time):
     message = f"Your total focus time this week is {weekly_focus_time:.2f} hours."
     
