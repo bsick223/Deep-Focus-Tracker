@@ -10,6 +10,8 @@ import pygame
 import sys
 from button import Button
 import json
+from datetime import datetime
+import matplotlib.pyplot as plt
 
 pygame.init()
 
@@ -46,26 +48,48 @@ LONG_BREAK_BUTTON = Button(None, (WIDTH/2+150, HEIGHT/2-140), 120, 30, "Long Bre
                            pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#FFFFFF", "#9ab034")
 RESET_BUTTON = Button(WHITE_BUTTON, (WIDTH/2, HEIGHT/2+180), 170, 60, "RESET", 
                       pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#c97676", "#9ab034")
+STATS_BUTTON = Button(WHITE_BUTTON, (WIDTH/2, HEIGHT/2+260), 170, 60, "STATS", 
+                      pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#c97676", "#9ab034")
 
 POMODORO_LENGTH = 1500  # 1500 secs / 25 mins
 SHORT_BREAK_LENGTH = 300  # 300 secs / 5 mins
 LONG_BREAK_LENGTH = 1200  # 1200 secs / 20 mins
 
-def save_progress(total_time):
+def save_progress(daily_focus_time, total_focus_time):
     with open("focus_data.json", "w") as file:
-        json.dump({"total_focus_time": total_time}, file)
+        json.dump({
+            "total_focus_time": total_focus_time,
+            "daily_focus_time": daily_focus_time  # Save the daily focus time correctly
+        }, file)
 
 def load_progress():
     try:
         with open("focus_data.json", "r") as file:
-            data = file.read().strip()  # Read the file content
-            if not data:  # Check if the file is empty
-                return 0
-            return json.loads(data).get("total_focus_time", 0)
-    except (FileNotFoundError, json.JSONDecodeError):  # Handle missing or invalid JSON files
-        return 0
+            data = file.read().strip()
+            if not data:
+                return {}, 0  # Return empty dictionary and 0 total time if no data
+            loaded_data = json.loads(data)
+            daily_time = loaded_data.get("daily_focus_time", {})
+            total_time = loaded_data.get("total_focus_time", 0)
+            return daily_time, total_time
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}, 0
+    
+def show_stats():
+    dates = list(daily_focus_time.keys())
+    focus_times = [time / 60 for time in daily_focus_time.values()]  # Convert seconds to minutes
+    
+    plt.bar(dates, focus_times)
+    plt.xlabel('Date')
+    plt.ylabel('Focus Time (minutes)')
+    plt.title('Daily Focus Time')
+    plt.show()
 
-total_focus_time = load_progress()
+daily_focus_time, total_focus_time = load_progress()
+
+current_date = datetime.now().strftime("%Y-%m-%d")
+if current_date not in daily_focus_time:
+    daily_focus_time[current_date] = 0
 
 current_seconds = POMODORO_LENGTH
 state = "POMODORO"  # Can be "POMODORO", "SHORT_BREAK", "LONG_BREAK"
@@ -89,7 +113,7 @@ def draw_pomodoro_indicators(screen, count):
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            save_progress(total_focus_time)
+            save_progress(daily_focus_time, total_focus_time)
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -105,6 +129,8 @@ while True:
                 elif state == 'LONG_BREAK':
                     current_seconds = LONG_BREAK_LENGTH
                 started = False  # Stop the timer
+            if STATS_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                show_stats()
             if POMODORO_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 current_seconds = POMODORO_LENGTH
                 started = False
@@ -133,8 +159,8 @@ while True:
                 # Update the total_focus_time with the elapsed time
                 elapsed_time = last_seconds - current_seconds
                 total_focus_time += elapsed_time
-                last_seconds = current_seconds  # Update last_seconds for the next tick
-                
+                daily_focus_time[current_date] += elapsed_time  # Add to today's focus time
+                last_seconds = current_seconds
             else:
                 if state == "POMODORO":
                     total_focus_time += POMODORO_LENGTH
@@ -193,6 +219,8 @@ while True:
     SHORT_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
     LONG_BREAK_BUTTON.update(SCREEN)
     LONG_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
+    STATS_BUTTON.update(SCREEN)  
+    STATS_BUTTON.change_color(pygame.mouse.get_pos())
 
     if current_seconds >= 0:
         display_seconds = current_seconds % 60
