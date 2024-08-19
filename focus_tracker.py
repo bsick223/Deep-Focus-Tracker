@@ -4,6 +4,8 @@
 # do the 4 rounds of pomodoro then a long break
 # be able to save progress
 
+# when goal achieved play a video of self dancing
+
 import pygame
 import sys
 from button import Button
@@ -42,10 +44,12 @@ SHORT_BREAK_BUTTON = Button(None, (WIDTH/2, HEIGHT/2-140), 120, 30, "Short Break
                             pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#FFFFFF", "#9ab034")
 LONG_BREAK_BUTTON = Button(None, (WIDTH/2+150, HEIGHT/2-140), 120, 30, "Long Break", 
                            pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#FFFFFF", "#9ab034")
+RESET_BUTTON = Button(WHITE_BUTTON, (WIDTH/2, HEIGHT/2+180), 170, 60, "RESET", 
+                      pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20), "#c97676", "#9ab034")
 
 POMODORO_LENGTH = 1500  # 1500 secs / 25 mins
 SHORT_BREAK_LENGTH = 300  # 300 secs / 5 mins
-LONG_BREAK_LENGTH = 900  # 900 secs / 15 mins
+LONG_BREAK_LENGTH = 1200  # 1200 secs / 20 mins
 
 def save_progress(total_time):
     with open("focus_data.json", "w") as file:
@@ -75,10 +79,12 @@ def draw_pomodoro_indicators(screen, count):
         color = "#FFD700" if i < count else "#666666"  # Filled or empty indicator
         pygame.draw.circle(screen, color, (WIDTH//2 + i*40 - 60, HEIGHT//2 + 160), 15)
 
-def format_time(seconds):
-    mins, secs = divmod(seconds, 60)
-    hrs, mins = divmod(mins, 60)
-    return f"{hrs}h {mins}m {secs}s"
+
+
+# def format_time(seconds):
+#     mins, secs = divmod(seconds, 60)
+#     hrs, mins = divmod(mins, 60)
+#     return f"{hrs}h {mins}m {secs}s"
 
 while True:
     for event in pygame.event.get():
@@ -89,6 +95,14 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if START_STOP_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 started = not started  # Toggle the started state
+            if RESET_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                if state == 'POMODORO':
+                    current_seconds = POMODORO_LENGTH # Reset the timer to the initial Pomodoro length
+                elif state == 'SHORT_BREAK':
+                    current_seconds = SHORT_BREAK_LENGTH
+                elif state == 'LONG_BREAK':
+                    current_seconds = LONG_BREAK_LENGTH
+                started = False  # Stop the timer
             if POMODORO_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 current_seconds = POMODORO_LENGTH
                 started = False
@@ -161,6 +175,8 @@ while True:
         pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
         SCREEN.blit(highlight_surface, LONG_BREAK_BUTTON.rect.inflate(10, 10).topleft)
 
+    RESET_BUTTON.update(SCREEN)
+    RESET_BUTTON.change_color(pygame.mouse.get_pos())
     START_STOP_BUTTON.update(SCREEN)
     START_STOP_BUTTON.change_color(pygame.mouse.get_pos())
     POMODORO_BUTTON.update(SCREEN)
