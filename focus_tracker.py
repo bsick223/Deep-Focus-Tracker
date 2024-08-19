@@ -23,6 +23,7 @@ pomodoro_sound = pygame.mixer.Sound("assets/Finish Alarm.wav")
 # Set the opacity (0 is fully transparent, 255 is fully opaque)
 opacity = 40
 
+
 WIDTH, HEIGHT = 900, 600
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pomodoro Timer")
@@ -54,6 +55,9 @@ STATS_BUTTON = Button(WHITE_BUTTON, (WIDTH/2, HEIGHT/2+260), 170, 60, "STATS",
 POMODORO_LENGTH = 1500  # 1500 secs / 25 mins
 SHORT_BREAK_LENGTH = 300  # 300 secs / 5 mins
 LONG_BREAK_LENGTH = 1200  # 1200 secs / 20 mins
+
+# Track time in the current Pomodoro session
+accumulated_seconds = 0  
 
 def save_progress(daily_focus_time, total_focus_time):
     with open("focus_data.json", "w") as file:
@@ -110,19 +114,34 @@ def draw_pomodoro_indicators(screen, count):
 #     hrs, mins = divmod(mins, 60)
 #     return f"{hrs}h {mins}m {secs}s"
 
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            if started and state == "POMODORO":  # Check if the timer is running and in Pomodoro state
+                elapsed_time = last_seconds - current_seconds
+                accumulated_seconds += elapsed_time
+                total_focus_time += accumulated_seconds
+                daily_focus_time[current_date] += accumulated_seconds
             save_progress(daily_focus_time, total_focus_time)
             pygame.quit()
             sys.exit()
+            
         if event.type == pygame.MOUSEBUTTONDOWN:
             if START_STOP_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                if started:
+                    # Timer is being stopped, add accumulated time to total
+                    if state == "POMODORO":
+                        total_focus_time += accumulated_seconds
+                        daily_focus_time[current_date] += accumulated_seconds
                 started = not started  # Toggle the started state
-                # Reset last_seconds when starting or stopping
-                last_seconds = current_seconds
+                last_seconds = current_seconds  # Reset last_seconds when starting or stopping
+                accumulated_seconds = 0  # Reset accumulated time on stop/start
+                
             if RESET_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 if state == 'POMODORO':
+                    accumulated_seconds = 0 
                     current_seconds = POMODORO_LENGTH # Reset the timer to the initial Pomodoro length
                 elif state == 'SHORT_BREAK':
                     current_seconds = SHORT_BREAK_LENGTH
@@ -132,6 +151,7 @@ while True:
             if STATS_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 show_stats()
             if POMODORO_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                accumulated_seconds = 0
                 current_seconds = POMODORO_LENGTH
                 started = False
                 state = "POMODORO"
@@ -155,16 +175,16 @@ while True:
         if event.type == pygame.USEREVENT and started:
             if current_seconds > 0:
                 current_seconds -= 1
-                
-                # Update the total_focus_time with the elapsed time
-                elapsed_time = last_seconds - current_seconds
-                total_focus_time += elapsed_time
-                daily_focus_time[current_date] += elapsed_time  # Add to today's focus time
-                last_seconds = current_seconds
+                if state == "POMODORO":
+                    elapsed_time = last_seconds - current_seconds
+                    accumulated_seconds += elapsed_time  # Add to accumulated time
+                    last_seconds = current_seconds
             else:
                 if state == "POMODORO":
-                    total_focus_time += POMODORO_LENGTH
+                    total_focus_time += accumulated_seconds
+                    daily_focus_time[current_date] += accumulated_seconds
                     pomodoro_count += 1
+                    accumulated_seconds = 0
                     if pomodoro_count < 4:
                         state = "SHORT_BREAK"
                         current_seconds = SHORT_BREAK_LENGTH
