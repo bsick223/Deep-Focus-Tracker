@@ -95,6 +95,8 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if START_STOP_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 started = not started  # Toggle the started state
+                # Reset last_seconds when starting or stopping
+                last_seconds = current_seconds
             if RESET_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 if state == 'POMODORO':
                     current_seconds = POMODORO_LENGTH # Reset the timer to the initial Pomodoro length
@@ -127,6 +129,12 @@ while True:
         if event.type == pygame.USEREVENT and started:
             if current_seconds > 0:
                 current_seconds -= 1
+                
+                # Update the total_focus_time with the elapsed time
+                elapsed_time = last_seconds - current_seconds
+                total_focus_time += elapsed_time
+                last_seconds = current_seconds  # Update last_seconds for the next tick
+                
             else:
                 if state == "POMODORO":
                     total_focus_time += POMODORO_LENGTH
