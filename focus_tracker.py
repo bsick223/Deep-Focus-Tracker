@@ -12,6 +12,7 @@ from button import Button
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
 pygame.init()
 
@@ -88,6 +89,23 @@ def show_stats():
     plt.ylabel('Focus Time (minutes)')
     plt.title('Daily Focus Time')
     plt.show()
+    
+def get_weekly_focus_time(daily_focus_time):
+    # Get the current date
+    today = datetime.now().date()
+
+    # Calculate the start of the week (assuming week starts on Monday)
+    start_of_week = today - timedelta(days=today.weekday())
+
+    # Sum the focus time for each day of the current week
+    weekly_focus_time = 0.0
+    for date_str, focus_time in daily_focus_time.items():
+        date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        if start_of_week <= date <= today:
+            weekly_focus_time += focus_time
+
+    # Convert to floating-point hours
+    return weekly_focus_time / 3600.0  # Convert from seconds to hours
 
 daily_focus_time, total_focus_time = load_progress()
 
@@ -114,142 +132,145 @@ def draw_pomodoro_indicators(screen, count):
 #     hrs, mins = divmod(mins, 60)
 #     return f"{hrs}h {mins}m {secs}s"
 
+def main():
 
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                if started and state == "POMODORO":  # Check if the timer is running and in Pomodoro state
+                    elapsed_time = last_seconds - current_seconds
+                    accumulated_seconds += elapsed_time
+                    total_focus_time += accumulated_seconds
+                    daily_focus_time[current_date] += accumulated_seconds
+                save_progress(daily_focus_time, total_focus_time)
+                pygame.quit()
+                sys.exit()
+                
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if START_STOP_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    if started:
+                        # Timer is being stopped, add accumulated time to total
+                        if state == "POMODORO":
+                            total_focus_time += accumulated_seconds
+                            daily_focus_time[current_date] += accumulated_seconds
+                    started = not started  # Toggle the started state
+                    last_seconds = current_seconds  # Reset last_seconds when starting or stopping
+                    accumulated_seconds = 0  # Reset accumulated time on stop/start
+                    
+                if RESET_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    if state == 'POMODORO':
+                        accumulated_seconds = 0 
+                        current_seconds = POMODORO_LENGTH # Reset the timer to the initial Pomodoro length
+                    elif state == 'SHORT_BREAK':
+                        current_seconds = SHORT_BREAK_LENGTH
+                    elif state == 'LONG_BREAK':
+                        current_seconds = LONG_BREAK_LENGTH
+                    started = False  # Stop the timer
+                if STATS_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    show_stats()
+                if POMODORO_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    accumulated_seconds = 0
+                    current_seconds = POMODORO_LENGTH
+                    started = False
+                    state = "POMODORO"
+                if SHORT_BREAK_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    current_seconds = SHORT_BREAK_LENGTH
+                    started = False
+                    state = "SHORT_BREAK"
+                if LONG_BREAK_BUTTON.check_for_input(pygame.mouse.get_pos()):
+                    current_seconds = LONG_BREAK_LENGTH
+                    started = False
+                    state = "LONG_BREAK"
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            if started and state == "POMODORO":  # Check if the timer is running and in Pomodoro state
-                elapsed_time = last_seconds - current_seconds
-                accumulated_seconds += elapsed_time
-                total_focus_time += accumulated_seconds
-                daily_focus_time[current_date] += accumulated_seconds
-            save_progress(daily_focus_time, total_focus_time)
-            pygame.quit()
-            sys.exit()
-            
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if START_STOP_BUTTON.check_for_input(pygame.mouse.get_pos()):
                 if started:
-                    # Timer is being stopped, add accumulated time to total
+                    START_STOP_BUTTON.text_input = "STOP"
+                else:
+                    START_STOP_BUTTON.text_input = "START"
+                
+                START_STOP_BUTTON.text = pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20).render(
+                    START_STOP_BUTTON.text_input, True, START_STOP_BUTTON.base_color)
+                    
+            if event.type == pygame.USEREVENT and started:
+                if current_seconds > 0:
+                    current_seconds -= 1
+                    if state == "POMODORO":
+                        elapsed_time = last_seconds - current_seconds
+                        accumulated_seconds += elapsed_time  # Add to accumulated time
+                        last_seconds = current_seconds
+                else:
                     if state == "POMODORO":
                         total_focus_time += accumulated_seconds
                         daily_focus_time[current_date] += accumulated_seconds
-                started = not started  # Toggle the started state
-                last_seconds = current_seconds  # Reset last_seconds when starting or stopping
-                accumulated_seconds = 0  # Reset accumulated time on stop/start
-                
-            if RESET_BUTTON.check_for_input(pygame.mouse.get_pos()):
-                if state == 'POMODORO':
-                    accumulated_seconds = 0 
-                    current_seconds = POMODORO_LENGTH # Reset the timer to the initial Pomodoro length
-                elif state == 'SHORT_BREAK':
-                    current_seconds = SHORT_BREAK_LENGTH
-                elif state == 'LONG_BREAK':
-                    current_seconds = LONG_BREAK_LENGTH
-                started = False  # Stop the timer
-            if STATS_BUTTON.check_for_input(pygame.mouse.get_pos()):
-                show_stats()
-            if POMODORO_BUTTON.check_for_input(pygame.mouse.get_pos()):
-                accumulated_seconds = 0
-                current_seconds = POMODORO_LENGTH
-                started = False
-                state = "POMODORO"
-            if SHORT_BREAK_BUTTON.check_for_input(pygame.mouse.get_pos()):
-                current_seconds = SHORT_BREAK_LENGTH
-                started = False
-                state = "SHORT_BREAK"
-            if LONG_BREAK_BUTTON.check_for_input(pygame.mouse.get_pos()):
-                current_seconds = LONG_BREAK_LENGTH
-                started = False
-                state = "LONG_BREAK"
-
-            if started:
-                START_STOP_BUTTON.text_input = "STOP"
-            else:
-                START_STOP_BUTTON.text_input = "START"
+                        pomodoro_count += 1
+                        accumulated_seconds = 0
+                        if pomodoro_count < 4:
+                            state = "SHORT_BREAK"
+                            current_seconds = SHORT_BREAK_LENGTH
+                            break_sound.play()
+                        else:
+                            state = "LONG_BREAK"
+                            current_seconds = LONG_BREAK_LENGTH
+                            break_sound.play()
+                            pomodoro_count = 0  # Reset after the long break
+                    elif state == "SHORT_BREAK":
+                        state = "POMODORO"
+                        current_seconds = POMODORO_LENGTH
+                        pomodoro_sound.play()
+                    elif state == "LONG_BREAK":
+                        state = "POMODORO"
+                        current_seconds = POMODORO_LENGTH
+                        pomodoro_sound.play()
             
-            START_STOP_BUTTON.text = pygame.font.Font("assets/ArialRoundedMTBold.ttf", 20).render(
-                START_STOP_BUTTON.text_input, True, START_STOP_BUTTON.base_color)
-                
-        if event.type == pygame.USEREVENT and started:
-            if current_seconds > 0:
-                current_seconds -= 1
-                if state == "POMODORO":
-                    elapsed_time = last_seconds - current_seconds
-                    accumulated_seconds += elapsed_time  # Add to accumulated time
-                    last_seconds = current_seconds
-            else:
-                if state == "POMODORO":
-                    total_focus_time += accumulated_seconds
-                    daily_focus_time[current_date] += accumulated_seconds
-                    pomodoro_count += 1
-                    accumulated_seconds = 0
-                    if pomodoro_count < 4:
-                        state = "SHORT_BREAK"
-                        current_seconds = SHORT_BREAK_LENGTH
-                        break_sound.play()
-                    else:
-                        state = "LONG_BREAK"
-                        current_seconds = LONG_BREAK_LENGTH
-                        break_sound.play()
-                        pomodoro_count = 0  # Reset after the long break
-                elif state == "SHORT_BREAK":
-                    state = "POMODORO"
-                    current_seconds = POMODORO_LENGTH
-                    pomodoro_sound.play()
-                elif state == "LONG_BREAK":
-                    state = "POMODORO"
-                    current_seconds = POMODORO_LENGTH
-                    pomodoro_sound.play()
+
+        SCREEN.fill("#ba4949")
+        SCREEN.blit(BACKDROP, BACKDROP.get_rect(center=(WIDTH/2, HEIGHT/2)))
         
+        draw_pomodoro_indicators(SCREEN, pomodoro_count)
+        
+        # Draw the highlight around the active button
+        if state == "POMODORO":
+            # pygame.draw.rect(SCREEN, "#FFD700", POMODORO_BUTTON.rect.inflate(10, 10), border_radius=12)
+            highlight_surface = pygame.Surface(POMODORO_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
+            highlight_surface.set_alpha(opacity)  # Set the opacity (0 is fully transparent, 255 is fully opaque)
+            pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
+            SCREEN.blit(highlight_surface, POMODORO_BUTTON.rect.inflate(10, 10).topleft)
+        elif state == "SHORT_BREAK":
+            # pygame.draw.rect(SCREEN, "#FFD700", SHORT_BREAK_BUTTON.rect.inflate(10, 10), border_radius=12)
+            highlight_surface = pygame.Surface(SHORT_BREAK_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
+            highlight_surface.set_alpha(opacity)
+            pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
+            SCREEN.blit(highlight_surface, SHORT_BREAK_BUTTON.rect.inflate(10, 10).topleft)
+        elif state == "LONG_BREAK":
+            # pygame.draw.rect(SCREEN, "#FFD700", LONG_BREAK_BUTTON.rect.inflate(10, 10), border_radius=12)
+            highlight_surface = pygame.Surface(LONG_BREAK_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
+            highlight_surface.set_alpha(opacity)
+            pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
+            SCREEN.blit(highlight_surface, LONG_BREAK_BUTTON.rect.inflate(10, 10).topleft)
 
-    SCREEN.fill("#ba4949")
-    SCREEN.blit(BACKDROP, BACKDROP.get_rect(center=(WIDTH/2, HEIGHT/2)))
-    
-    draw_pomodoro_indicators(SCREEN, pomodoro_count)
-    
-    # Draw the highlight around the active button
-    if state == "POMODORO":
-        # pygame.draw.rect(SCREEN, "#FFD700", POMODORO_BUTTON.rect.inflate(10, 10), border_radius=12)
-        highlight_surface = pygame.Surface(POMODORO_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
-        highlight_surface.set_alpha(opacity)  # Set the opacity (0 is fully transparent, 255 is fully opaque)
-        pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
-        SCREEN.blit(highlight_surface, POMODORO_BUTTON.rect.inflate(10, 10).topleft)
-    elif state == "SHORT_BREAK":
-        # pygame.draw.rect(SCREEN, "#FFD700", SHORT_BREAK_BUTTON.rect.inflate(10, 10), border_radius=12)
-        highlight_surface = pygame.Surface(SHORT_BREAK_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
-        highlight_surface.set_alpha(opacity)
-        pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
-        SCREEN.blit(highlight_surface, SHORT_BREAK_BUTTON.rect.inflate(10, 10).topleft)
-    elif state == "LONG_BREAK":
-        # pygame.draw.rect(SCREEN, "#FFD700", LONG_BREAK_BUTTON.rect.inflate(10, 10), border_radius=12)
-        highlight_surface = pygame.Surface(LONG_BREAK_BUTTON.rect.inflate(10, 10).size, pygame.SRCALPHA)
-        highlight_surface.set_alpha(opacity)
-        pygame.draw.rect(highlight_surface, (255, 215, 0), highlight_surface.get_rect(), border_radius=12)
-        SCREEN.blit(highlight_surface, LONG_BREAK_BUTTON.rect.inflate(10, 10).topleft)
+        RESET_BUTTON.update(SCREEN)
+        RESET_BUTTON.change_color(pygame.mouse.get_pos())
+        START_STOP_BUTTON.update(SCREEN)
+        START_STOP_BUTTON.change_color(pygame.mouse.get_pos())
+        POMODORO_BUTTON.update(SCREEN)
+        POMODORO_BUTTON.change_color(pygame.mouse.get_pos())
+        SHORT_BREAK_BUTTON.update(SCREEN)
+        SHORT_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
+        LONG_BREAK_BUTTON.update(SCREEN)
+        LONG_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
+        STATS_BUTTON.update(SCREEN)  
+        STATS_BUTTON.change_color(pygame.mouse.get_pos())
 
-    RESET_BUTTON.update(SCREEN)
-    RESET_BUTTON.change_color(pygame.mouse.get_pos())
-    START_STOP_BUTTON.update(SCREEN)
-    START_STOP_BUTTON.change_color(pygame.mouse.get_pos())
-    POMODORO_BUTTON.update(SCREEN)
-    POMODORO_BUTTON.change_color(pygame.mouse.get_pos())
-    SHORT_BREAK_BUTTON.update(SCREEN)
-    SHORT_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
-    LONG_BREAK_BUTTON.update(SCREEN)
-    LONG_BREAK_BUTTON.change_color(pygame.mouse.get_pos())
-    STATS_BUTTON.update(SCREEN)  
-    STATS_BUTTON.change_color(pygame.mouse.get_pos())
+        if current_seconds >= 0:
+            display_seconds = current_seconds % 60
+            display_minutes = int(current_seconds // 60)
+            timer_text = FONT.render(f"{display_minutes:02}:{display_seconds:02}", True, "white")
+        else:
+            timer_text = FONT.render("00:00", True, "white")
+        
+        SCREEN.blit(timer_text, timer_text_rect)
 
-    if current_seconds >= 0:
-        display_seconds = current_seconds % 60
-        display_minutes = int(current_seconds // 60)
-        timer_text = FONT.render(f"{display_minutes:02}:{display_seconds:02}", True, "white")
-    else:
-        timer_text = FONT.render("00:00", True, "white")
-    
-    SCREEN.blit(timer_text, timer_text_rect)
+        pygame.display.update()
+        CLOCK.tick(60)
 
-    pygame.display.update()
-    CLOCK.tick(60)
+if __name__ == "__main__":
+    main()
