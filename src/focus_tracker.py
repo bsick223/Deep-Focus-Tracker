@@ -195,9 +195,10 @@ def main():
                 if current_seconds > 0:
                     current_seconds -= 1
                     if state == "POMODORO":
-                        elapsed_time = last_seconds - current_seconds
-                        accumulated_seconds += elapsed_time  # Add to accumulated time
-                        last_seconds = current_seconds
+                        accumulated_seconds += 1
+                        # elapsed_time = last_seconds - current_seconds
+                        # accumulated_seconds += elapsed_time  # Add to accumulated time
+                        # last_seconds = current_seconds
                 else:
                     if state == "POMODORO":
                         total_focus_time += accumulated_seconds
